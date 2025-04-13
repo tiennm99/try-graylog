@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <!-- Console Appender -->
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+
+    <!-- Graylog GELF Appender -->
+    <Gelf name="GelfAppender" host="udp:localhost" port="12201" version="1.1" extractStackTrace="true"
+      filterStackTrace="true" mdcProfiling="true" includeFullMdc="true" maximumMessageSize="8192">
+      <Field name="timestamp" pattern="%d{dd MMM yyyy HH:mm:ss,SSS}"/>
+      <Field name="level" pattern="%level"/>
+      <Field name="simpleClassName" pattern="%C{1}"/>
+      <Field name="className" pattern="%C"/>
+      <Field name="server" pattern="%host"/>
+      <Field name="application" literal="java-logging-demo"/>
+    </Gelf>
+  </Appenders>
+
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="GelfAppender"/>
+    </Root>
+    <Logger name="com.miti99.graylog" level="debug" additivity="false">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="GelfAppender"/>
+    </Logger>
+  </Loggers>
+</Configuration>
